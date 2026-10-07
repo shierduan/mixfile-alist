@@ -94,8 +94,8 @@
     <string name="stop_listening">停止聆听</string>
 
     <!-- 阅读视图 -->
-    <string name="reader_mode">阅读视图</string>
-    <string name="edit_mode">编辑视图</string>
+    <string name="reader_mode">阅读模式</string>
+    <string name="edit_mode">编辑模式</string>
     <string name="switch_view">切换视图</string>
     <string name="reader_settings">阅读设置</string>
     <string name="reader_font_size">字号</string>
@@ -109,4 +109,17 @@
     <string name="next_chapter">下一章</string>
     <string name="chapter_end">本章已读完</string>
     <string name="reading_progress">阅读进度</string>
+
+    <!-- 卷 -->
+    <string name="volume">卷</string>
+    <string name="new_volume">新建卷</string>
+    <string name="volume_title">卷名</string>
+    <string name="default_volume_name">正文</string>
+    <string name="delete_volume_confirm">确定要删除此卷及其所有章节吗？此操作不可恢复。</string>
+    <string name="empty_volumes">暂无卷\n点击右下角按钮新建卷</string>
+    <string name="expand">展开</string>
+    <string name="collapse">收起</string>
+    <string name="add_chapter_to_volume">在此卷中新建章节</string>
+    <string name="book_reader">阅读</string>
+    <string name="book_structure">目录</string>
 </resources>

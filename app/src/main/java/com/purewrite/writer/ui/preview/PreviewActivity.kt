@@ -19,7 +19,6 @@ import com.purewrite.writer.util.MarkdownParser
 import com.purewrite.writer.util.MarkdownRenderer
 import com.purewrite.writer.util.PrefsManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -64,7 +63,7 @@ class PreviewActivity : AppCompatActivity() {
                 }
             } else if (bookId > 0) {
                 val book = repository.getBookById(bookId)
-                val chapters = repository.getChaptersByBook(bookId).first()
+                val chapters = repository.getChaptersByBook(bookId)
                 withContext(Dispatchers.Main) {
                     book?.let {
                         binding.toolbar.title = it.title

@@ -48,7 +48,7 @@ class StatsActivity : AppCompatActivity() {
             val allContent = StringBuilder()
 
             books.forEach { book ->
-                val chapters = repository.getChaptersByBook(book.id).first()
+                val chapters = repository.getChaptersByBook(book.id)
                 totalChapters += chapters.size
                 chapters.forEach { ch ->
                     totalWords += ch.wordCount

@@ -10,7 +10,7 @@ import com.purewrite.writer.util.PrefsManager
 class App : Application() {
     val database by lazy { AppDatabase.getDatabase(this) }
     val repository by lazy {
-        WritingRepository(database.bookDao(), database.chapterDao())
+        WritingRepository(database.bookDao(), database.volumeDao(), database.chapterDao())
     }
     val prefs by lazy { PrefsManager(this) }
 

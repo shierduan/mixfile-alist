@@ -11,8 +11,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ChapterDao {
 
-    @Query("SELECT * FROM chapters WHERE bookId = :bookId ORDER BY `order` ASC, createdAt ASC")
-    fun getChaptersByBook(bookId: Long): Flow<List<ChapterEntity>>
+    @Query("SELECT * FROM chapters WHERE volumeId = :volumeId ORDER BY `order` ASC, createdAt ASC")
+    fun getChaptersByVolume(volumeId: Long): Flow<List<ChapterEntity>>
+
+    @Query("SELECT * FROM chapters WHERE volumeId = :volumeId ORDER BY `order` ASC, createdAt ASC")
+    suspend fun getChaptersByVolumeList(volumeId: Long): List<ChapterEntity>
 
     @Query("SELECT * FROM chapters WHERE id = :id")
     suspend fun getChapterById(id: Long): ChapterEntity?
@@ -29,12 +32,31 @@ interface ChapterDao {
     @Query("DELETE FROM chapters WHERE id = :id")
     suspend fun deleteChapterById(id: Long)
 
-    @Query("SELECT COUNT(*) FROM chapters WHERE bookId = :bookId")
-    suspend fun getChapterCount(bookId: Long): Int
+    @Query("SELECT COUNT(*) FROM chapters WHERE volumeId = :volumeId")
+    suspend fun getChapterCountByVolume(volumeId: Long): Int
 
-    @Query("SELECT COALESCE(SUM(wordCount), 0) FROM chapters WHERE bookId = :bookId")
-    suspend fun getTotalWords(bookId: Long): Int
+    /**
+     * 获取书籍全部章节（通过 JOIN 卷表），按卷顺序+章节顺序排列
+     */
+    @Query(
+        """SELECT c.* FROM chapters c
+           INNER JOIN volumes v ON c.volumeId = v.id
+           WHERE v.bookId = :bookId
+           ORDER BY v.`order` ASC, v.createdAt ASC, c.`order` ASC, c.createdAt ASC"""
+    )
+    suspend fun getChaptersByBook(bookId: Long): List<ChapterEntity>
 
-    @Query("SELECT * FROM chapters WHERE bookId = :bookId ORDER BY `order` ASC LIMIT 1 OFFSET :offset")
-    suspend fun getChapterAt(bookId: Long, offset: Int): ChapterEntity?
+    @Query(
+        """SELECT COUNT(*) FROM chapters c
+           INNER JOIN volumes v ON c.volumeId = v.id
+           WHERE v.bookId = :bookId"""
+    )
+    suspend fun getChapterCountByBook(bookId: Long): Int
+
+    @Query(
+        """SELECT COALESCE(SUM(c.wordCount), 0) FROM chapters c
+           INNER JOIN volumes v ON c.volumeId = v.id
+           WHERE v.bookId = :bookId"""
+    )
+    suspend fun getTotalWordsByBook(bookId: Long): Int
 }

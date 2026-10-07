@@ -6,28 +6,27 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
- * 章节实体：归属于卷
+ * 卷实体：书籍与章节之间的中间层级
+ * 一本书可含多卷，每卷可含多章
  */
 @Entity(
-    tableName = "chapters",
+    tableName = "volumes",
     foreignKeys = [
         ForeignKey(
-            entity = VolumeEntity::class,
+            entity = BookEntity::class,
             parentColumns = ["id"],
-            childColumns = ["volumeId"],
+            childColumns = ["bookId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("volumeId")]
+    indices = [Index("bookId")]
 )
-data class ChapterEntity(
+data class VolumeEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val volumeId: Long,
+    val bookId: Long,
     val title: String,
-    val content: String = "",
     val order: Int = 0,
-    val wordCount: Int = 0,
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 )

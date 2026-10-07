@@ -4,16 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [BookEntity::class, ChapterEntity::class],
-    version = 1,
+    entities = [BookEntity::class, VolumeEntity::class, ChapterEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
+    abstract fun volumeDao(): VolumeDao
     abstract fun chapterDao(): ChapterDao
 
     companion object {

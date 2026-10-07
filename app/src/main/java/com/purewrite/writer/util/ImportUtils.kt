@@ -58,7 +58,7 @@ object ImportUtils {
             if (currentTitle != null || currentContent.isNotBlank()) {
                 chapters.add(
                     ChapterEntity(
-                        bookId = -1,
+                        volumeId = -1,
                         title = currentTitle ?: "第${order + 1}章",
                         content = currentContent.toString().trimEnd(),
                         order = order++
@@ -97,7 +97,7 @@ object ImportUtils {
         if (chapters.isEmpty()) {
             chapters.add(
                 ChapterEntity(
-                    bookId = -1,
+                    volumeId = -1,
                     title = bookTitle.ifEmpty { "未命名章节" },
                     content = text,
                     order = 0
@@ -123,7 +123,7 @@ object ImportUtils {
             // 整个文件作为一个章节
             chapters.add(
                 ChapterEntity(
-                    bookId = -1,
+                    volumeId = -1,
                     title = bookTitle.ifBlank { "未命名章节" },
                     content = text.trim(),
                     order = 0
@@ -139,7 +139,7 @@ object ImportUtils {
                 val content = if (firstLineEnd < section.length) section.substring(firstLineEnd + 1).trim() else ""
                 chapters.add(
                     ChapterEntity(
-                        bookId = -1,
+                        volumeId = -1,
                         title = title,
                         content = content,
                         order = index

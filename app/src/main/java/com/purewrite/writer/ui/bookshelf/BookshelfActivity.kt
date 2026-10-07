@@ -103,9 +103,12 @@ class BookshelfActivity : AppCompatActivity() {
             // 创建书籍
             val book = BookEntity(title = result.bookTitle)
             val bookId = repository.insertBook(book)
+            // 创建默认卷
+            val volume = com.purewrite.writer.data.db.VolumeEntity(bookId = bookId, title = "正文")
+            val volumeId = repository.insertVolume(volume)
             // 创建章节
             result.chapters.forEach { ch ->
-                repository.insertChapter(ch.copy(bookId = bookId))
+                repository.insertChapter(ch.copy(volumeId = volumeId))
             }
             withContext(Dispatchers.Main) {
                 android.widget.Toast.makeText(
@@ -245,7 +248,7 @@ class BookshelfActivity : AppCompatActivity() {
                 val book = pendingExportBook ?: return
                 val asMd = pendingExportIsMarkdown
                 lifecycleScope.launch {
-                    val chapters = repository.getChaptersByBook(book.id).first()
+                    val chapters = repository.getChaptersByBook(book.id)
                     val success = if (asMd) {
                         com.purewrite.writer.util.ExportUtils.exportBookToMarkdown(
                             this@BookshelfActivity, uri, book, chapters
@@ -323,8 +326,8 @@ class BookAdapter(
         val context = holder.itemView.context
         val repo = (context.applicationContext as App).repository
         scope.launch {
-            val count = repo.getChapterCount(book.id)
-            val words = repo.getTotalWords(book.id)
+            val count = repo.getChapterCountByBook(book.id)
+            val words = repo.getTotalWordsByBook(book.id)
             withContext(Dispatchers.Main) {
                 holder.binding.tvStats.text = "${context.getString(R.string.chapter_count)} $count · ${context.getString(R.string.word_count)} $words"
             }
