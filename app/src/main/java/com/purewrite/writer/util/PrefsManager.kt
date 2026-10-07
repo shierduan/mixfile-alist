@@ -59,4 +59,20 @@ class PrefsManager(context: Context) {
                 .putInt("today_words_count", value)
                 .apply()
         }
+
+    // 阅读模式设置
+    var readerFontSize: Int
+        get() = prefs.getInt("reader_font_size", 18)
+        set(value) = prefs.edit().putInt("reader_font_size", value).apply()
+
+    var readerLineSpacing: Float
+        get() = prefs.getFloat("reader_line_spacing", 1.8f)
+        set(value) = prefs.edit().putFloat("reader_line_spacing", value).apply()
+
+    /**
+     * 阅读模式背景：0=羊皮纸, 1=纯白, 2=护眼绿, 3=夜间黑
+     */
+    var readerBgTheme: Int
+        get() = prefs.getInt("reader_bg_theme", 0)
+        set(value) = prefs.edit().putInt("reader_bg_theme", value).apply()
 }

@@ -46,28 +46,100 @@
         android:layout_height="0.5dp"
         android:background="@color/divider" />
 
-    <!-- 正文编辑区 -->
-    <ScrollView
+    <!-- 正文内容容器（编辑模式 + 阅读模式共享区域） -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_weight="1">
 
-        <EditText
-            android:id="@+id/etContent"
+        <!-- 编辑模式 -->
+        <ScrollView
+            android:id="@+id/svEditor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@null"
-            android:gravity="top|start"
-            android:hint="开始创作..."
-            android:inputType="textMultiLine|textCapSentences"
-            android:lineSpacingMultiplier="1.6"
-            android:padding="16dp"
-            android:textColor="@color/editor_text"
-            android:textColorHint="@color/text_hint"
-            android:textSize="18sp" />
+            android:fillViewport="true">
 
-    </ScrollView>
+            <EditText
+                android:id="@+id/etContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="top|start"
+                android:hint="开始创作..."
+                android:inputType="textMultiLine|textCapSentences"
+                android:lineSpacingMultiplier="1.6"
+                android:padding="16dp"
+                android:textColor="@color/editor_text"
+                android:textColorHint="@color/text_hint"
+                android:textSize="18sp" />
+
+        </ScrollView>
+
+        <!-- 阅读模式 -->
+        <ScrollView
+            android:id="@+id/svReader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/reader_bg_parchment"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="32dp">
+
+                <TextView
+                    android:id="@+id/tvReaderTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/reader_title"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReaderContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingMultiplier="1.8"
+                    android:textColor="@color/reader_text_light"
+                    android:textSize="18sp" />
+
+                <!-- 章节导航 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPrevChapter"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/prev_chapter" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnNextChapter"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="@string/next_chapter" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
 
     <!-- 底部写作助手工具栏 -->
     <LinearLayout

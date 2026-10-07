@@ -31,4 +31,16 @@
     <color name="colorAccent">#FF6D00</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <!-- 阅读模式背景 -->
+    <color name="reader_bg_parchment">#F5ECD8</color>
+    <color name="reader_bg_white">#FFFFFF</color>
+    <color name="reader_bg_green">#C7EDCC</color>
+    <color name="reader_bg_dark">#1A1A1A</color>
+
+    <!-- 阅读模式文字色 -->
+    <color name="reader_text_light">#2C2C2C</color>
+    <color name="reader_text_dark">#D0D0D0</color>
+    <color name="reader_title">#333333</color>
+    <color name="reader_title_dark">#E0E0E0</color>
 </resources>
