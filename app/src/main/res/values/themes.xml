@@ -32,6 +32,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="materialCardViewStyle">@style/CardStyle</item>
+        <item name="android:windowAnimationStyle">@style/ActivityTransition</item>
     </style>
 
     <style name="Theme.PureWriter.Splash" parent="Theme.SplashScreen">
@@ -43,7 +44,7 @@
     <!-- 卡片样式：大圆角 + 微阴影 -->
     <style name="CardStyle" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">20dp</item>
-        <item name="cardElevation">2dp</item>
+        <item name="cardElevation">3dp</item>
         <item name="cardBackgroundColor">@color/md_surface_container_high</item>
         <item name="strokeWidth">0dp</item>
     </style>
@@ -67,6 +68,19 @@
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:fontFamily">serif</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- 页面转场动画：淡入淡出 + 轻微缩放，避免生硬跳切 -->
+    <style name="ActivityTransition" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
+
+    <!-- RecyclerView 列表项进入动画 -->
+    <style name="RecyclerViewItemAnim" parent="android:Widget">
+        <item name="android:layoutAnimation">@anim/layout_animation_fade_in</item>
     </style>
 
 </resources>

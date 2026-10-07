@@ -12,8 +12,8 @@ android {
         applicationId = "com.purewrite.writer"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.5.0"
+        versionCode = 7
+        versionName = "1.6.0"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -44,6 +44,10 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+    }
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 
     packaging {

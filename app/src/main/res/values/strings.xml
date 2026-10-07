@@ -93,7 +93,7 @@
     <string name="voice_tap_to_speak">点击说话，说完后自动识别</string>
     <string name="voice_error">语音识别出错</string>
     <string name="voice_model_needed_title">需要下载语音模型</string>
-    <string name="voice_model_needed_message">语音识别使用离线模型，需要先下载中文模型（约 42MB），下载后可永久离线使用，无需联网。</string>
+    <string name="voice_model_needed_message">语音识别使用离线模型（约 42MB）。可在线下载（自动选择国内镜像），或手动下载模型 ZIP 后从本地导入。下载后可永久离线使用，无需联网。</string>
     <string name="voice_downloading_model">正在下载语音模型</string>
     <string name="voice_download_canceled">下载已取消</string>
     <string name="voice_download_failed">模型下载失败，请检查网络后重试</string>

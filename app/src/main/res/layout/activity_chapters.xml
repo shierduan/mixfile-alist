@@ -36,6 +36,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="100dp"
         android:scrollbars="none"
+        android:layoutAnimation="@anim/layout_animation_fade_in"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout

@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- ====== Material 3 暗色色板 ====== -->
+    <!-- Primary：靛蓝（暗色模式提亮） -->
     <color name="md_primary">#B5C2FF</color>
     <color name="md_on_primary">#002C92</color>
     <color name="md_primary_container">#2942C8</color>
     <color name="md_on_primary_container">#DEE0FF</color>
 
+    <!-- Secondary：暖橙 -->
     <color name="md_secondary">#FFB870</color>
     <color name="md_on_secondary">#472100</color>
     <color name="md_secondary_container">#673E00</color>
     <color name="md_on_secondary_container">#FFDDB1</color>
 
+    <!-- Tertiary：青绿 -->
     <color name="md_tertiary">#B8D1A1</color>
     <color name="md_on_tertiary">#243600</color>
     <color name="md_tertiary_container">#3A4D2B</color>
     <color name="md_on_tertiary_container">#D4EABB</color>
 
+    <!-- Error -->
     <color name="md_error">#FFB4AB</color>
     <color name="md_on_error">#690005</color>
     <color name="md_error_container">#93000A</color>
     <color name="md_on_error_container">#FFDAD6</color>
 
+    <!-- Background & Surface -->
     <color name="md_background">#131318</color>
     <color name="md_on_background">#E4E2E6</color>
     <color name="md_surface">#131318</color>
@@ -33,6 +38,7 @@
     <color name="md_inverse_surface">#E4E2E6</color>
     <color name="md_inverse_on_surface">#2F3036</color>
 
+    <!-- Outline -->
     <color name="md_outline">#8E9099</color>
     <color name="md_outline_variant">#44464F</color>
 
@@ -67,8 +73,13 @@
     <color name="colorPrimary">#B5C2FF</color>
     <color name="colorPrimaryDark">#8E9DDB</color>
     <color name="colorAccent">#FFB870</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="success">#6FC479</color>
     <color name="danger">#FFB4AB</color>
+
+    <!-- 敏感词检测高亮 -->
+    <color name="sensitive_highlight">#F57F17</color>
 
     <!-- 暗色书封渐变 -->
     <color name="gradient_start_1">#2942C8</color>

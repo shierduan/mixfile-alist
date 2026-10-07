@@ -39,7 +39,8 @@
             android:paddingHorizontal="12dp"
             android:paddingTop="8dp"
             android:paddingBottom="100dp"
-            android:scrollbars="none" />
+            android:scrollbars="none"
+            android:layoutAnimation="@anim/layout_animation_fade_in" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
