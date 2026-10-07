@@ -29,6 +29,9 @@ object VoskModelManager {
 
     private const val MODEL_VERSION = "vosk-model-small-cn-0.22"
 
+    /** 打包在 APK assets 中的模型 zip 文件名 */
+    private const val ASSET_MODEL_ZIP = "vosk-model-small-cn-0.22.zip"
+
     /**
      * 模型下载源（按优先级排序，依次尝试）
      * 1. hf-mirror.com —— HuggingFace 国内镜像，大陆可直连
@@ -53,6 +56,56 @@ object VoskModelManager {
         return dir.isDirectory &&
             File(dir, "conf").isDirectory &&
             File(dir, "am").isDirectory
+    }
+
+    /**
+     * 从 APK assets 中解压内置模型到内部存储（首启调用）
+     * 模型已打包进 APK，无需联网下载。
+     * 返回是否成功。
+     */
+    suspend fun extractFromAssets(
+        context: Context,
+        onProgress: (Int) -> Unit
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
+            onProgress(5)
+            val targetDir = getModelDir(context)
+            // 清理可能存在的不完整目录
+            if (targetDir.exists()) targetDir.deleteRecursively()
+
+            val assetManager = context.assets
+
+            // 从 assets 读取并解压
+            assetManager.open(ASSET_MODEL_ZIP).use { input ->
+                val bytes = input.readBytes()
+                onProgress(40)
+                val zipInput = java.io.ByteArrayInputStream(bytes)
+                ZipInputStream(zipInput).use { zis ->
+                    extractZipStream(zis, targetDir.parentFile!!)
+                }
+            }
+
+            onProgress(90)
+            val ok = isModelReady(context)
+            onProgress(if (ok) 100 else 0)
+            ok
+        } catch (e: Exception) {
+            e.printStackTrace()
+            onProgress(0)
+            false
+        }
+    }
+
+    /**
+     * 检查 assets 中是否内置了模型
+     */
+    fun hasAssetModel(context: Context): Boolean {
+        return try {
+            context.assets.openFd(ASSET_MODEL_ZIP)
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     /**

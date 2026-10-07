@@ -1,6 +1,5 @@
 package com.purewrite.writer.ui.editor
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -44,9 +43,6 @@ class EditorActivity : AppCompatActivity() {
     private val autoSaveHandler = Handler(Looper.getMainLooper())
     private val autoSaveRunnable = Runnable { saveChapter() }
     private var isDirty = false
-
-    private var voiceProgressDialog: com.google.android.material.dialog.MaterialAlertDialogBuilder? = null
-    private var voiceDialog: androidx.appcompat.app.AlertDialog? = null
 
     private lateinit var voiceHelper: VoiceToTextHelper
     private var isListening = false
@@ -237,87 +233,19 @@ class EditorActivity : AppCompatActivity() {
             voiceHelper.requestPermission(this, REQUEST_RECORD_AUDIO)
             return
         }
-        // 检查模型是否就绪，未就绪则提示下载
+        // 检查模型是否就绪，未就绪则从 assets 解压内置模型
         if (!voiceHelper.isModelReady()) {
-            promptDownloadModel()
+            prepareModel()
             return
         }
         beginListening()
     }
 
-    /** 显示下载模型对话框（提供在线下载 / 本地导入两种方式） */
-    private fun promptDownloadModel() {
-        val options = arrayOf("在线下载（自动选择镜像）", "从本地 ZIP 文件导入")
-        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.voice_model_needed_title))
-            .setMessage(getString(R.string.voice_model_needed_message))
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> downloadModel()
-                    1 -> pickLocalModelZip()
-                }
-            }
-            .setNegativeButton(getString(android.R.string.cancel), null)
-            .show()
-    }
-
-    /** 选择本地模型 ZIP 文件导入 */
-    private fun pickLocalModelZip() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/zip"
-        }
-        startActivityForResult(intent, REQUEST_PICK_MODEL_ZIP)
-    }
-
-    /** 从本地 ZIP 文件导入模型 */
-    private fun importModelFromZip(uri: android.net.Uri) {
-        val progressView = android.widget.LinearLayout(this).apply {
-            orientation = android.widget.LinearLayout.VERTICAL
-            setPadding(60, 40, 60, 20)
-        }
-        val progressBar = android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            max = 100
-            progress = 50
-            isIndeterminate = false
-        }
-        val statusText = android.widget.TextView(this).apply {
-            text = "正在解压模型…"
-            setTextColor(ContextCompat.getColor(this@EditorActivity, R.color.text_secondary))
-            textSize = 13f
-            setPadding(0, 12, 0, 0)
-        }
-        progressView.addView(progressBar)
-        progressView.addView(statusText)
-
-        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-            .setTitle("导入语音模型")
-            .setView(progressView)
-            .setCancelable(false)
-            .show()
-
-        lifecycleScope.launch {
-            val ok = com.purewrite.writer.util.VoskModelManager.importFromLocalZip(
-                this@EditorActivity, uri
-            ) { percent ->
-                runOnUiThread {
-                    progressBar.progress = percent
-                    statusText.text = if (percent < 100) "正在解压… $percent%" else "完成"
-                }
-            }
-            dialog.dismiss()
-            if (ok) {
-                Toast.makeText(this@EditorActivity, R.string.voice_model_ready, Toast.LENGTH_SHORT).show()
-                beginListening()
-            } else {
-                Toast.makeText(this@EditorActivity, "导入失败，请确认 ZIP 文件为有效的 Vosk 模型", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    /** 下载 Vosk 中文模型（带进度） */
-    private fun downloadModel() {
-        // 自定义进度对话框
+    /**
+     * 准备语音模型：从 APK assets 中解压内置模型到内部存储
+     * 模型已打包进 APK，无需联网下载
+     */
+    private fun prepareModel() {
         val progressView = android.widget.LinearLayout(this).apply {
             orientation = android.widget.LinearLayout.VERTICAL
             setPadding(60, 40, 60, 20)
@@ -328,7 +256,7 @@ class EditorActivity : AppCompatActivity() {
             isIndeterminate = false
         }
         val statusText = android.widget.TextView(this).apply {
-            text = "准备下载…"
+            text = "正在初始化语音模型…"
             setTextColor(ContextCompat.getColor(this@EditorActivity, R.color.text_secondary))
             textSize = 13f
             setPadding(0, 12, 0, 0)
@@ -336,34 +264,29 @@ class EditorActivity : AppCompatActivity() {
         progressView.addView(progressBar)
         progressView.addView(statusText)
 
-        voiceDialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.voice_downloading_model))
+        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle("语音模型初始化")
             .setView(progressView)
             .setCancelable(false)
-            .setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
-                lifecycleScope.launch {
-                    // 用户取消后不做删除，下次可继续
-                    Toast.makeText(this@EditorActivity, R.string.voice_download_canceled, Toast.LENGTH_SHORT).show()
-                }
-            }
             .show()
 
         lifecycleScope.launch {
-            val ok = com.purewrite.writer.util.VoskModelManager.downloadAndExtract(this@EditorActivity) { percent ->
+            val ok = com.purewrite.writer.util.VoskModelManager.extractFromAssets(this@EditorActivity) { percent ->
                 runOnUiThread {
                     progressBar.progress = percent
                     statusText.text = when {
-                        percent < 100 -> "下载中 $percent%"
-                        else -> "正在解压…"
+                        percent < 40 -> "正在读取模型…"
+                        percent < 90 -> "正在解压… $percent%"
+                        else -> "校验中…"
                     }
                 }
             }
-            voiceDialog?.dismiss()
+            dialog.dismiss()
             if (ok) {
                 Toast.makeText(this@EditorActivity, R.string.voice_model_ready, Toast.LENGTH_SHORT).show()
                 beginListening()
             } else {
-                Toast.makeText(this@EditorActivity, R.string.voice_download_failed, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@EditorActivity, "语音模型初始化失败，请重启应用重试", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -390,7 +313,7 @@ class EditorActivity : AppCompatActivity() {
                     ContextCompat.getColor(this, R.color.text_secondary)
                 )
                 if (msg == "MODEL_NOT_READY") {
-                    promptDownloadModel()
+                    prepareModel()
                 } else {
                     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
                 }
@@ -424,19 +347,8 @@ class EditorActivity : AppCompatActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && data?.data != null) {
-            when (requestCode) {
-                REQUEST_PICK_MODEL_ZIP -> importModelFromZip(data.data!!)
-            }
-        }
-    }
-
     companion object {
         private const val REQUEST_RECORD_AUDIO = 3001
-        private const val REQUEST_PICK_MODEL_ZIP = 3002
     }
 
     private fun loadChapter() {

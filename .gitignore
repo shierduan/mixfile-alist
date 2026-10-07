@@ -56,3 +56,6 @@ vcs.xml
 # OS files
 .DS_Store
 Thumbs.db
+
+# 构建期下载的语音模型（不入库，构建时自动下载）
+app/src/main/assets/vosk-model-small-cn-0.22.zip
