@@ -326,10 +326,12 @@ class BookAdapter(
         val context = holder.itemView.context
         val repo = (context.applicationContext as App).repository
         scope.launch {
-            val count = repo.getChapterCountByBook(book.id)
+            val volCount = repo.getVolumeCount(book.id)
+            val chCount = repo.getChapterCountByBook(book.id)
             val words = repo.getTotalWordsByBook(book.id)
             withContext(Dispatchers.Main) {
-                holder.binding.tvStats.text = "${context.getString(R.string.chapter_count)} $count · ${context.getString(R.string.word_count)} $words"
+                holder.binding.tvStats.text =
+                    "${context.getString(R.string.volume)} $volCount · ${context.getString(R.string.chapter_count)} $chCount · ${context.getString(R.string.word_count)} $words"
             }
         }
 

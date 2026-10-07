@@ -44,10 +44,12 @@ class StatsActivity : AppCompatActivity() {
             val books = repository.getAllBooks().first()
             var totalWords = 0
             var totalChapters = 0
+            var totalVolumes = 0
             var totalParagraphs = 0
             val allContent = StringBuilder()
 
             books.forEach { book ->
+                totalVolumes += repository.getVolumeCount(book.id)
                 val chapters = repository.getChaptersByBook(book.id)
                 totalChapters += chapters.size
                 chapters.forEach { ch ->
@@ -60,6 +62,8 @@ class StatsActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 binding.tvTotalWords.text = totalWords.toString()
                 binding.tvTotalChapters.text = totalChapters.toString()
+                binding.tvTotalBooks.text = books.size.toString()
+                binding.tvTotalVolumes.text = totalVolumes.toString()
                 binding.tvParagraphs.text = totalParagraphs.toString()
                 val reading = WordCounter.estimateReadingTime(allContent.toString())
                 binding.tvReadingTime.text = "$reading ${getString(R.string.minutes)}"

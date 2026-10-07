@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BookDao {
 
-    @Query("SELECT * FROM books ORDER BY updatedAt DESC")
+    @Query("SELECT * FROM books ORDER BY lastOpenedAt DESC, updatedAt DESC")
     fun getAllBooks(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE id = :id")
