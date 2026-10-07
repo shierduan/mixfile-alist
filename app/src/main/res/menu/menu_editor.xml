@@ -13,4 +13,9 @@
         android:title="查找与替换"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_sensitive_check"
+        android:title="@string/sensitive_check"
+        app:showAsAction="never" />
+
 </menu>

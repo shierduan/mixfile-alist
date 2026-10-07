@@ -24,6 +24,7 @@ import com.purewrite.writer.databinding.ItemChapterBinding
 import com.purewrite.writer.databinding.ItemVolumeBinding
 import com.purewrite.writer.ui.editor.EditorActivity
 import com.purewrite.writer.ui.reader.BookReaderActivity
+import com.purewrite.writer.ui.sensitive.SensitiveWordActivity
 import com.purewrite.writer.util.ExportUtils
 import com.purewrite.writer.util.TimeUtils
 import com.purewrite.writer.util.WordCounter
@@ -69,6 +70,7 @@ class ChapterListActivity : AppCompatActivity() {
                 R.id.action_reader -> openReader()
                 R.id.action_export_txt -> exportBook(asMarkdown = false)
                 R.id.action_export_md -> exportBook(asMarkdown = true)
+                R.id.action_sensitive_check -> checkWholeBookSensitive()
             }
             true
         }
@@ -266,6 +268,7 @@ class ChapterListActivity : AppCompatActivity() {
                 R.id.action_rename -> showRenameChapterDialog(chapter)
                 R.id.action_export_txt -> exportChapter(chapter, asMarkdown = false)
                 R.id.action_export_md -> exportChapter(chapter, asMarkdown = true)
+                R.id.action_sensitive_check -> checkChapterSensitive(chapter)
                 R.id.action_delete -> showDeleteChapterConfirm(chapter)
             }
             true
@@ -313,6 +316,40 @@ class ChapterListActivity : AppCompatActivity() {
             putExtra("book_title", bookTitle)
         }
         startActivity(intent)
+    }
+
+    /** 单章敏感词检测 */
+    private fun checkChapterSensitive(chapter: ChapterEntity) {
+        startActivity(
+            SensitiveWordActivity.createIntent(
+                this,
+                chapter.title.ifEmpty { getString(R.string.untitled_chapter) },
+                chapter.content
+            )
+        )
+    }
+
+    /** 全书敏感词检测：拼接所有章节内容 */
+    private fun checkWholeBookSensitive() {
+        lifecycleScope.launch {
+            val chapters = repository.getChaptersByBook(bookId)
+            if (chapters.isEmpty()) {
+                Toast.makeText(this@ChapterListActivity, "暂无章节", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            val sb = StringBuilder()
+            chapters.forEachIndexed { index, ch ->
+                sb.append("【第").append(index + 1).append("章 ").append(ch.title).append("】\n")
+                sb.append(ch.content).append("\n\n")
+            }
+            startActivity(
+                SensitiveWordActivity.createIntent(
+                    this@ChapterListActivity,
+                    "$bookTitle（全书）",
+                    sb.toString()
+                )
+            )
+        }
     }
 
     // ==================== 导出 ====================

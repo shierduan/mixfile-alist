@@ -78,6 +78,9 @@
     <color name="success">#3FA34D</color>
     <color name="danger">#BA1A1A</color>
 
+    <!-- 敏感词检测高亮 -->
+    <color name="sensitive_highlight">#FFD54F</color>
+
     <!-- 阅读模式 -->
     <color name="reader_bg_parchment">#F5ECD8</color>
     <color name="reader_bg_white">#FFFFFF</color>

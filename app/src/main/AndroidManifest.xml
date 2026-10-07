@@ -53,6 +53,9 @@
         <activity
             android:name=".ui.backup.RecycleBinActivity" />
 
+        <activity
+            android:name=".ui.sensitive.SensitiveWordActivity" />
+
     </application>
 
 </manifest>

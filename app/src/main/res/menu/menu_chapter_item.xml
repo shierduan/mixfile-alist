@@ -14,6 +14,10 @@
         android:title="@string/export_md" />
 
     <item
+        android:id="@+id/action_sensitive_check"
+        android:title="@string/sensitive_check" />
+
+    <item
         android:id="@+id/action_delete"
         android:title="@string/delete" />
 

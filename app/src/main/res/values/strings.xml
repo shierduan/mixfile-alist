@@ -130,4 +130,25 @@
     <string name="add_chapter_to_volume">在此卷中新建章节</string>
     <string name="book_reader">阅读</string>
     <string name="book_structure">目录</string>
+
+    <!-- 敏感词检测 -->
+    <string name="sensitive_check">敏感词检测</string>
+    <string name="sensitive_check_book">全书敏感词检测</string>
+    <string name="sensitive_add_word">添加敏感词</string>
+    <string name="sensitive_import">导入词库</string>
+    <string name="sensitive_export">导出词库</string>
+    <string name="sensitive_clear">清空词库</string>
+    <string name="sensitive_recheck">重新检测</string>
+    <string name="sensitive_no_result">未发现敏感词</string>
+    <string name="sensitive_no_words">词库为空，请添加或导入词条</string>
+    <string name="sensitive_import_success">已导入 %1$d 个词条（合并去重）</string>
+    <string name="sensitive_import_failed">导入失败或文件为空</string>
+    <string name="sensitive_export_success">导出成功</string>
+    <string name="sensitive_export_failed">导出失败</string>
+    <string name="sensitive_cleared">词库已清空</string>
+    <string name="sensitive_added">已添加</string>
+    <string name="sensitive_clear_confirm">确定要清空全部词库吗？此操作不可恢复。</string>
+    <string name="sensitive_library_title">词库管理</string>
+    <string name="sensitive_result_title">检测结果</string>
+    <string name="sensitive_hint_word">输入敏感词</string>
 </resources>

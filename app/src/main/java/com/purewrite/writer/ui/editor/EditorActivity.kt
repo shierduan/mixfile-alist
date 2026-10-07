@@ -15,6 +15,7 @@ import com.purewrite.writer.R
 import com.purewrite.writer.data.db.ChapterEntity
 import com.purewrite.writer.databinding.ActivityEditorBinding
 import com.purewrite.writer.ui.preview.PreviewActivity
+import com.purewrite.writer.ui.sensitive.SensitiveWordActivity
 import com.purewrite.writer.util.ChinesePunctuationConverter
 import com.purewrite.writer.util.PrefsManager
 import com.purewrite.writer.util.VoiceToTextHelper
@@ -78,6 +79,10 @@ class EditorActivity : AppCompatActivity() {
                 }
                 R.id.action_find_replace -> {
                     showFindReplaceDialog()
+                    true
+                }
+                R.id.action_sensitive_check -> {
+                    startSensitiveCheck()
                     true
                 }
                 else -> false
@@ -204,6 +209,14 @@ class EditorActivity : AppCompatActivity() {
             putExtra("book_id", bookId)
         }
         startActivity(intent)
+    }
+
+    /** 启动当前章节的敏感词检测 */
+    private fun startSensitiveCheck() {
+        val title = binding.etChapterTitle.text?.toString()?.trim().orEmpty()
+        val content = binding.etContent.text?.toString().orEmpty()
+        val displayTitle = title.ifEmpty { getString(R.string.untitled_chapter) }
+        startActivity(SensitiveWordActivity.createIntent(this, displayTitle, content))
     }
 
     private fun toggleVoiceInput() {
