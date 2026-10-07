@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -126,7 +126,7 @@ class BookshelfActivity : AppCompatActivity() {
             onBookClick = { book -> openBook(book) },
             onBookMore = { book, view -> showBookMenu(book, view) }
         )
-        binding.rvBooks.layoutManager = LinearLayoutManager(this)
+        binding.rvBooks.layoutManager = GridLayoutManager(this, 2)
         binding.rvBooks.adapter = adapter
     }
 
@@ -314,16 +314,28 @@ class BookAdapter(
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val book = books[position]
+        val context = holder.itemView.context
         holder.binding.tvTitle.text = book.title
         if (book.author.isNotBlank()) {
             holder.binding.tvAuthor.text = book.author
             holder.binding.tvAuthor.visibility = View.VISIBLE
+        } else {
+            holder.binding.tvAuthor.visibility = View.GONE
         }
-        holder.binding.vCover.setBackgroundColor(book.coverColor)
+        // 封面色：优先用书籍 coverColor，否则按 id 取预设色
+        val coverColors = intArrayOf(
+            context.getColor(R.color.cover_1),
+            context.getColor(R.color.cover_2),
+            context.getColor(R.color.cover_3),
+            context.getColor(R.color.cover_4),
+            context.getColor(R.color.cover_5),
+            context.getColor(R.color.cover_6)
+        )
+        val colorIndex = ((book.id % coverColors.size).toInt()).coerceIn(0, coverColors.size - 1)
+        holder.binding.layoutCover.setBackgroundColor(coverColors[colorIndex])
         holder.binding.tvUpdated.text = TimeUtils.getFriendlyTime(book.updatedAt)
 
-        // Load stats asynchronously
-        val context = holder.itemView.context
+        // 异步加载统计
         val repo = (context.applicationContext as App).repository
         scope.launch {
             val volCount = repo.getVolumeCount(book.id)

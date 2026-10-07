@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#1A73E8</color>
-    <color name="primary_dark">#1557B0</color>
-    <color name="primary_light">#64B5F6</color>
-    <color name="accent">#FF6D00</color>
+    <!-- 主色调：深靛蓝，沉稳优雅 -->
+    <color name="primary">#5B5BD6</color>
+    <color name="primary_dark">#4343A8</color>
+    <color name="primary_light">#8B8BE8</color>
+    <color name="primary_container">#E3E3F8</color>
+    <color name="on_primary_container">#1A1A4D</color>
+    <color name="accent">#F0A04B</color>
+    <color name="accent_container">#FFE9D0</color>
 
-    <!-- Background colors -->
-    <color name="bg_writer">#FFF8E7</color>
-    <color name="bg_writer_dark">#1E1E1E</color>
+    <!-- 背景色 -->
+    <color name="bg_writer">#F6F5F2</color>
     <color name="bg_card">#FFFFFF</color>
-    <color name="bg_card_dark">#2A2A2A</color>
+    <color name="bg_card_alt">#FBFAF7</color>
 
-    <!-- Text colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_hint">#BDBDBD</color>
+    <!-- 文字色 -->
+    <color name="text_primary">#1A1A2E</color>
+    <color name="text_secondary">#6B6B80</color>
+    <color name="text_hint">#B0B0BE</color>
     <color name="text_on_primary">#FFFFFF</color>
 
-    <!-- Editor colors -->
-    <color name="editor_text">#2C2C2C</color>
-    <color name="editor_text_dark">#E0E0E0</color>
-    <color name="editor_bg">#FFFDF5</color>
-    <color name="editor_bg_dark">#1E1E1E</color>
+    <!-- 编辑器色 -->
+    <color name="editor_text">#1F1F2E</color>
+    <color name="editor_bg">#FFFEFA</color>
+    <color name="editor_title">#2A2A40</color>
 
-    <!-- Misc -->
-    <color name="divider">#E0E0E0</color>
-    <color name="divider_dark">#424242</color>
-    <color name="colorPrimary">#1A73E8</color>
-    <color name="colorPrimaryDark">#1557B0</color>
-    <color name="colorAccent">#FF6D00</color>
+    <!-- 杂项 -->
+    <color name="divider">#ECEAE5</color>
+    <color name="colorPrimary">#5B5BD6</color>
+    <color name="colorPrimaryDark">#4343A8</color>
+    <color name="colorAccent">#F0A04B</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="success">#3FA34D</color>
+    <color name="danger">#E05A6B</color>
 
     <!-- 阅读模式背景 -->
     <color name="reader_bg_parchment">#F5ECD8</color>
@@ -43,4 +46,12 @@
     <color name="reader_text_dark">#D0D0D0</color>
     <color name="reader_title">#333333</color>
     <color name="reader_title_dark">#E0E0E0</color>
+
+    <!-- 书封渐变色（书架用） -->
+    <color name="cover_1">#5B5BD6</color>
+    <color name="cover_2">#E05A6B</color>
+    <color name="cover_3">#F0A04B</color>
+    <color name="cover_4">#3FA34D</color>
+    <color name="cover_5">#3B82C4</color>
+    <color name="cover_6">#A855F7</color>
 </resources>

@@ -90,16 +90,7 @@ class ChapterListActivity : AppCompatActivity() {
     }
 
     private fun loadBookInfo() {
-        binding.tvBookTitle.text = bookTitle
-        lifecycleScope.launch {
-            val count = repository.getChapterCountByBook(bookId)
-            val words = repository.getTotalWordsByBook(bookId)
-            val volCount = repository.getVolumeCount(bookId)
-            withContext(Dispatchers.Main) {
-                binding.tvBookStats.text =
-                    "${getString(R.string.volume)} $volCount · ${getString(R.string.chapter_count)} $count · ${getString(R.string.total_words)} $words"
-            }
-        }
+        binding.toolbar.title = bookTitle
     }
 
     // ==================== 数据加载 ====================
@@ -112,7 +103,6 @@ class ChapterListActivity : AppCompatActivity() {
                 if (volumes.isEmpty()) {
                     adapter.submitList(emptyList())
                     binding.tvEmpty.visibility = View.VISIBLE
-                    binding.tvEmpty.text = getString(R.string.empty_volumes)
                 } else {
                     binding.tvEmpty.visibility = View.GONE
                     // 默认展开第一个卷

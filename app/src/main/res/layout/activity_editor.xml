@@ -10,10 +10,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
+        android:background="@color/editor_bg"
         app:navigationIcon="@drawable/ic_edit"
+        app:navigationIconTint="@color/text_primary"
         app:title="@string/editor"
-        app:titleTextColor="@color/white">
+        app:titleTextColor="@color/text_primary">
 
         <TextView
             android:id="@+id/tvWordCount"
@@ -21,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:paddingEnd="16dp"
-            android:textColor="@color/white"
-            android:textSize="13sp" />
+            android:textColor="@color/primary"
+            android:textSize="12sp" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -30,18 +31,21 @@
         android:id="@+id/etChapterTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/editor_bg"
+        android:background="@null"
         android:hint="@string/chapter_title"
         android:maxLines="1"
-        android:padding="16dp"
-        android:textColor="@color/editor_text"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="12dp"
+        android:textColor="@color/editor_title"
         android:textColorHint="@color/text_hint"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_marginHorizontal="24dp"
         android:background="@color/divider" />
 
     <ScrollView
@@ -59,26 +63,32 @@
             android:gravity="top|start"
             android:hint="开始创作..."
             android:inputType="textMultiLine|textCapSentences"
-            android:lineSpacingMultiplier="1.6"
-            android:padding="16dp"
+            android:lineSpacingMultiplier="1.7"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="16dp"
             android:textColor="@color/editor_text"
             android:textColorHint="@color/text_hint"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
     </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/divider" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_card"
-        android:elevation="4dp"
+        android:background="@color/editor_bg"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="6dp">
 
         <ImageButton
             android:id="@+id/btnUndo"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/undo"
@@ -88,7 +98,7 @@
         <ImageButton
             android:id="@+id/btnRedo"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/redo"
@@ -98,7 +108,7 @@
         <ImageButton
             android:id="@+id/btnVoice"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/voice_input"
@@ -108,7 +118,7 @@
         <ImageButton
             android:id="@+id/btnPreview"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/preview"
@@ -118,7 +128,7 @@
         <ImageButton
             android:id="@+id/btnConvert"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/punctuation_convert"
@@ -128,7 +138,7 @@
         <ImageButton
             android:id="@+id/btnStats"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/stats"
@@ -138,7 +148,7 @@
         <ImageButton
             android:id="@+id/btnSave"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/save"

@@ -3,58 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="12dp">
 
     <!-- 卷头（可点击伸缩） -->
-    <LinearLayout
-        android:id="@+id/layoutVolumeHeader"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:background="@color/bg_card"
-        android:elevation="1dp">
+        android:layout_marginVertical="6dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="@color/bg_card_alt">
 
-        <ImageView
-            android:id="@+id/ivExpandIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="@string/expand"
-            android:src="@drawable/ic_next"
-            app:tint="@color/text_secondary" />
-
-        <TextView
-            android:id="@+id/tvVolumeTitle"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layoutVolumeHeader"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="12dp">
 
-        <TextView
-            android:id="@+id/tvVolumeChapterCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_hint"
-            android:textSize="12sp" />
+            <ImageView
+                android:id="@+id/ivExpandIcon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/expand"
+                android:src="@drawable/ic_next"
+                app:tint="@color/primary" />
 
-        <ImageButton
-            android:id="@+id/btnVolumeMore"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/settings"
-            android:src="@drawable/ic_edit"
-            app:tint="@color/text_secondary" />
+            <TextView
+                android:id="@+id/tvVolumeTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvVolumeChapterCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_hint"
+                android:textSize="12sp" />
+
+            <ImageButton
+                android:id="@+id/btnVolumeMore"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/settings"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/text_secondary" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- 章节容器（伸缩时切换 visibility） -->
     <LinearLayout
@@ -71,23 +81,23 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="10dp"
         android:background="?attr/selectableItemBackground"
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:src="@drawable/ic_edit"
-            app:tint="@color/text_hint" />
+            app:tint="@color/primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@string/add_chapter_to_volume"
-            android:textColor="@color/text_hint"
-            android:textSize="13sp" />
+            android:textColor="@color/primary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
