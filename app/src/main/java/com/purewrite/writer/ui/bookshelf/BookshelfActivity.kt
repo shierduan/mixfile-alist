@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -58,6 +59,14 @@ class BookshelfActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.action_import -> {
                     startImportFile()
+                    true
+                }
+                R.id.action_backup -> {
+                    startActivity(Intent(this, com.purewrite.writer.ui.backup.BackupActivity::class.java))
+                    true
+                }
+                R.id.action_recycle_bin -> {
+                    startActivity(Intent(this, com.purewrite.writer.ui.backup.RecycleBinActivity::class.java))
                     true
                 }
                 R.id.action_stats -> {
@@ -273,10 +282,11 @@ class BookshelfActivity : AppCompatActivity() {
     private fun showDeleteConfirm(book: BookEntity) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.confirm_delete)
-            .setMessage(R.string.delete_book_confirm)
+            .setMessage("删除后将移入回收站，可在回收站中恢复。是否确认删除？")
             .setPositiveButton(R.string.delete) { _, _ ->
                 lifecycleScope.launch {
-                    repository.deleteBook(book)
+                    repository.softDeleteBook(book.id)
+                    Toast.makeText(this@BookshelfActivity, "已移入回收站", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton(R.string.cancel, null)

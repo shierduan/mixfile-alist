@@ -8,6 +8,16 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_backup"
+        android:title="备份与恢复"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_recycle_bin"
+        android:title="回收站"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_stats"
         android:title="@string/stats"
         app:showAsAction="never" />

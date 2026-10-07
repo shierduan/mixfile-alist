@@ -26,8 +26,36 @@ class WritingRepository(
 
     suspend fun deleteBookById(id: Long) = bookDao.deleteBookById(id)
 
+    suspend fun getAllBooksList(): List<BookEntity> = bookDao.getAllBooksList()
+
+    /** 清空全部数据（用于恢复前的覆盖模式） */
+    suspend fun clearAll() {
+        chapterDao.deleteAllChapters()
+        volumeDao.deleteAllVolumes()
+        bookDao.deleteAllBooks()
+    }
+
     suspend fun updateLastOpened(id: Long, time: Long = System.currentTimeMillis()) =
         bookDao.updateLastOpened(id, time)
+
+    // ==================== 回收站（软删除） ====================
+    suspend fun softDeleteBook(id: Long) = bookDao.softDeleteBook(id)
+    suspend fun restoreBook(id: Long) = bookDao.restoreBook(id)
+    suspend fun getDeletedBooks(): List<BookEntity> = bookDao.getDeletedBooks()
+
+    suspend fun softDeleteVolume(id: Long) = volumeDao.softDeleteVolume(id)
+    suspend fun restoreVolume(id: Long) = volumeDao.restoreVolume(id)
+    suspend fun getDeletedVolumes(): List<VolumeEntity> = volumeDao.getDeletedVolumes()
+
+    suspend fun softDeleteChapter(id: Long) = chapterDao.softDeleteChapter(id)
+    suspend fun restoreChapter(id: Long) = chapterDao.restoreChapter(id)
+    suspend fun getDeletedChapters(): List<ChapterEntity> = chapterDao.getDeletedChapters()
+
+    /** 彻底删除书籍（含级联删除卷和章节） */
+    suspend fun permanentDeleteBook(id: Long) {
+        // 外键 CASCADE 会自动删除关联的卷和章节
+        bookDao.deleteBookById(id)
+    }
 
     // ==================== Volume ====================
     fun getVolumesByBook(bookId: Long): Flow<List<VolumeEntity>> = volumeDao.getVolumesByBook(bookId)
@@ -45,6 +73,8 @@ class WritingRepository(
     suspend fun deleteVolumeById(id: Long) = volumeDao.deleteVolumeById(id)
 
     suspend fun getVolumeCount(bookId: Long): Int = volumeDao.getVolumeCount(bookId)
+
+    suspend fun getAllVolumesList(): List<VolumeEntity> = volumeDao.getAllVolumesList()
 
     // ==================== Chapter ====================
     fun getChaptersByVolume(volumeId: Long): Flow<List<ChapterEntity>> = chapterDao.getChaptersByVolume(volumeId)
@@ -71,4 +101,6 @@ class WritingRepository(
     suspend fun getChapterCountByBook(bookId: Long): Int = chapterDao.getChapterCountByBook(bookId)
 
     suspend fun getTotalWordsByBook(bookId: Long): Int = chapterDao.getTotalWordsByBook(bookId)
+
+    suspend fun getAllChaptersList(): List<ChapterEntity> = chapterDao.getAllChaptersList()
 }

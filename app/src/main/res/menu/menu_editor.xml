@@ -8,4 +8,9 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_book" />
 
+    <item
+        android:id="@+id/action_find_replace"
+        android:title="查找与替换"
+        app:showAsAction="never" />
+
 </menu>

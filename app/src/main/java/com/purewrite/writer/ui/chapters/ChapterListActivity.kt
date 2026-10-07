@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -208,11 +209,12 @@ class ChapterListActivity : AppCompatActivity() {
     private fun showDeleteVolumeConfirm(volume: VolumeEntity) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.confirm_delete)
-            .setMessage(R.string.delete_volume_confirm)
+            .setMessage("删除后卷及其章节将移入回收站，可恢复。是否确认？")
             .setPositiveButton(R.string.delete) { _, _ ->
                 lifecycleScope.launch {
-                    repository.deleteVolume(volume)
+                    repository.softDeleteVolume(volume.id)
                     expandedVolumes.remove(volume.id)
+                    Toast.makeText(this@ChapterListActivity, "已移入回收站", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton(R.string.cancel, null)
@@ -292,10 +294,11 @@ class ChapterListActivity : AppCompatActivity() {
     private fun showDeleteChapterConfirm(chapter: ChapterEntity) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.confirm_delete)
-            .setMessage(R.string.delete_chapter_confirm)
+            .setMessage("删除后章节将移入回收站，可恢复。是否确认？")
             .setPositiveButton(R.string.delete) { _, _ ->
                 lifecycleScope.launch {
-                    repository.deleteChapter(chapter)
+                    repository.softDeleteChapter(chapter.id)
+                    Toast.makeText(this@ChapterListActivity, "已移入回收站", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton(R.string.cancel, null)

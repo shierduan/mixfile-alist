@@ -69,6 +69,67 @@ class EditorActivity : AppCompatActivity() {
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.toolbar.title = getString(R.string.editor)
+        binding.toolbar.inflateMenu(R.menu.menu_editor)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_switch_view -> {
+                    openPreview()
+                    true
+                }
+                R.id.action_find_replace -> {
+                    showFindReplaceDialog()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    /** 查找与替换对话框 */
+    private fun showFindReplaceDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_find_replace, null)
+        val etFind = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etFind)
+        val etReplace = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etReplace)
+        val tvResult = dialogView.findViewById<android.widget.TextView>(R.id.tvFindResult)
+
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle("查找与替换")
+            .setView(dialogView)
+            .setPositiveButton("全部替换") { _, _ ->
+                val find = etFind.text?.toString() ?: ""
+                val replace = etReplace.text?.toString() ?: ""
+                if (find.isBlank()) return@setPositiveButton
+                val content = binding.etContent.text?.toString() ?: ""
+                val count = content.windowed(find.length, 1, partialWindows = false).count { it == find }
+                if (count == 0) {
+                    tvResult.text = "未找到匹配内容"
+                    return@setPositiveButton
+                }
+                val newContent = content.replace(find, replace)
+                binding.etContent.setText(newContent)
+                android.widget.Toast.makeText(this, "已替换 $count 处", android.widget.Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("查找下一个") { _, _ ->
+                val find = etFind.text?.toString() ?: ""
+                if (find.isBlank()) return@setNegativeButton
+                findNext(find)
+            }
+            .setNeutralButton("关闭", null)
+            .show()
+    }
+
+    /** 查找下一个匹配项并定位光标 */
+    private fun findNext(query: String) {
+        val content = binding.etContent.text?.toString() ?: ""
+        val selectionStart = binding.etContent.selectionStart.coerceAtLeast(0)
+        // 从当前光标之后查找
+        val index = content.indexOf(query, selectionStart + 1)
+        val targetIndex = if (index >= 0) index else content.indexOf(query)
+        if (targetIndex >= 0) {
+            binding.etContent.setSelection(targetIndex, targetIndex + query.length)
+        } else {
+            android.widget.Toast.makeText(this, "未找到匹配内容", android.widget.Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupEditor() {
@@ -381,6 +442,10 @@ class EditorActivity : AppCompatActivity() {
                 chapter = updated
                 lastSavedContent = content
                 isDirty = false
+                // 自动备份
+                if (prefs.autoBackup) {
+                    com.purewrite.writer.util.AutoBackupManager.createInternalBackup(this@EditorActivity)
+                }
                 withContext(Dispatchers.Main) {
                     updateWordCount(content)
                     Toast.makeText(this@EditorActivity, R.string.saved, Toast.LENGTH_SHORT).show()

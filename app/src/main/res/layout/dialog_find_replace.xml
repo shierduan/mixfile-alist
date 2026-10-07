@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="查找"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="4dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etFind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="输入要查找的内容"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="替换为"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etReplace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="输入替换后的内容"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/tvFindResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="13sp"
+        android:textColor="@color/text_secondary" />
+</LinearLayout>

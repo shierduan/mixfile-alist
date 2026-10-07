@@ -13,5 +13,6 @@ data class BookEntity(
     val coverColor: Int = 0xFF1A73E8.toInt(),
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
-    val lastOpenedAt: Long = System.currentTimeMillis()
+    val lastOpenedAt: Long = System.currentTimeMillis(),
+    val deletedAt: Long = 0L
 )

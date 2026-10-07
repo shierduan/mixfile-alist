@@ -49,6 +49,12 @@
     <color name="accent">#E8A043</color>
     <color name="accent_container">#FFE9D0</color>
 
+    <!-- Material 3 通用语义色别名 -->
+    <color name="background">#FBF8F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F1EDE8</color>
+    <color name="error">#BA1A1A</color>
+
     <color name="bg_writer">#FBF8F5</color>
     <color name="bg_card">#FFFFFF</color>
     <color name="bg_card_alt">#F5F2EE</color>

@@ -75,4 +75,9 @@ class PrefsManager(context: Context) {
     var readerBgTheme: Int
         get() = prefs.getInt("reader_bg_theme", 0)
         set(value) = prefs.edit().putInt("reader_bg_theme", value).apply()
+
+    /** 是否开启自动备份 */
+    var autoBackup: Boolean
+        get() = prefs.getBoolean("auto_backup", true)
+        set(value) = prefs.edit().putBoolean("auto_backup", value).apply()
 }

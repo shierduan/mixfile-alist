@@ -47,6 +47,12 @@
             android:name=".ui.reader.BookReaderActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".ui.backup.BackupActivity" />
+
+        <activity
+            android:name=".ui.backup.RecycleBinActivity" />
+
     </application>
 
 </manifest>
