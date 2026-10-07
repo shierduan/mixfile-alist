@@ -4,23 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_writer">
+    android:background="@color/md_background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_writer"
-        app:elevation="0dp">
+        android:background="@color/md_background"
+        app:elevation="0dp"
+        app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/bg_writer"
-            app:navigationIcon="@drawable/ic_edit"
+            android:background="@color/md_background"
+            app:navigationIcon="@drawable/ic_prev"
             app:navigationIconTint="@color/text_primary"
             app:title="@string/chapters"
-            app:titleTextColor="@color/text_primary" />
+            app:titleTextColor="@color/text_primary"
+            app:titleTextAppearance="@style/TextAppearance.Title"
+            app:menu="@menu/menu_chapters" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,8 +32,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:paddingHorizontal="12dp"
         android:paddingTop="8dp"
-        android:paddingBottom="96dp"
+        android:paddingBottom="100dp"
+        android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout
@@ -43,20 +48,21 @@
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:alpha="0.4"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:alpha="0.3"
             android:src="@drawable/ic_book"
             app:tint="@color/text_hint" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/empty_volumes"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:fontFamily="serif" />
 
     </LinearLayout>
 
@@ -65,12 +71,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:contentDescription="@string/new_volume"
         android:text="@string/new_volume"
-        app:backgroundTint="@color/primary"
+        android:fontFamily="serif"
+        app:backgroundTint="@color/md_primary"
         app:icon="@drawable/ic_edit"
-        app:iconTint="@color/white"
-        app:tint="@color/white" />
+        app:iconTint="@color/md_on_primary"
+        app:tint="@color/md_on_primary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

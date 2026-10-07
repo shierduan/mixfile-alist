@@ -4,11 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginVertical="3dp"
-    app:cardCornerRadius="12dp"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="2dp"
+    app:cardCornerRadius="14dp"
     app:cardElevation="1dp"
-    app:strokeWidth="0dp">
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/md_surface_container_high"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,21 +18,23 @@
         android:orientation="horizontal"
         android:padding="14dp">
 
+        <!-- 章节序号 -->
         <TextView
             android:id="@+id/tvChapterIndex"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/bg_circle_number"
+            android:background="@drawable/bg_chapter_number"
             android:gravity="center"
-            android:textColor="@color/on_primary_container"
+            android:fontFamily="serif"
+            android:textColor="@color/md_on_primary_container"
             android:textSize="13sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="14dp"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
@@ -41,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:fontFamily="serif"
                 android:textColor="@color/text_primary"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -49,7 +54,7 @@
                 android:id="@+id/tvChapterPreview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/text_secondary"
@@ -59,9 +64,12 @@
                 android:id="@+id/tvChapterWords"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/primary"
-                android:textSize="11sp" />
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_volume_badge"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:textColor="@color/md_on_secondary_container"
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -70,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="2dp"
             android:textColor="@color/text_hint"
             android:textSize="10sp" />
 

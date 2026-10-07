@@ -1,24 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 夜间模式背景色 -->
-    <color name="bg_writer">#0F0F17</color>
-    <color name="bg_card">#1A1A26</color>
-    <color name="bg_card_alt">#14141F</color>
+    <!-- ====== Material 3 暗色色板 ====== -->
+    <color name="md_primary">#B5C2FF</color>
+    <color name="md_on_primary">#002C92</color>
+    <color name="md_primary_container">#2942C8</color>
+    <color name="md_on_primary_container">#DEE0FF</color>
 
-    <!-- 夜间模式文字色 -->
-    <color name="text_primary">#E8E8F0</color>
-    <color name="text_secondary">#9A9AAF</color>
-    <color name="text_hint">#55556A</color>
+    <color name="md_secondary">#FFB870</color>
+    <color name="md_on_secondary">#472100</color>
+    <color name="md_secondary_container">#673E00</color>
+    <color name="md_on_secondary_container">#FFDDB1</color>
 
-    <!-- 夜间模式编辑器色 -->
-    <color name="editor_text">#E0E0EC</color>
-    <color name="editor_bg">#13131D</color>
-    <color name="editor_title">#E0E0EC</color>
+    <color name="md_tertiary">#B8D1A1</color>
+    <color name="md_on_tertiary">#243600</color>
+    <color name="md_tertiary_container">#3A4D2B</color>
+    <color name="md_on_tertiary_container">#D4EABB</color>
 
-    <!-- 夜间模式分隔线 -->
-    <color name="divider">#2A2A3A</color>
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
 
-    <!-- 夜间主色调 -->
-    <color name="primary">#8B8BE8</color>
-    <color name="primary_dark">#6B6BD0</color>
+    <color name="md_background">#131318</color>
+    <color name="md_on_background">#E4E2E6</color>
+    <color name="md_surface">#131318</color>
+    <color name="md_on_surface">#E4E2E6</color>
+    <color name="md_surface_variant">#44464F</color>
+    <color name="md_on_surface_variant">#C4C6D0</color>
+    <color name="md_surface_container">#1F1F25</color>
+    <color name="md_surface_container_high">#2A2A32</color>
+    <color name="md_surface_container_low">#1A1A20</color>
+    <color name="md_inverse_surface">#E4E2E6</color>
+    <color name="md_inverse_on_surface">#2F3036</color>
+
+    <color name="md_outline">#8E9099</color>
+    <color name="md_outline_variant">#44464F</color>
+
+    <!-- ====== 应用语义色（暗色） ====== -->
+    <color name="primary">#B5C2FF</color>
+    <color name="primary_dark">#8E9DDB</color>
+    <color name="primary_light">#DEE0FF</color>
+    <color name="accent">#FFB870</color>
+    <color name="accent_container">#673E00</color>
+
+    <color name="bg_writer">#131318</color>
+    <color name="bg_card">#1F1F25</color>
+    <color name="bg_card_alt">#1A1A20</color>
+    <color name="bg_card_elevated">#2A2A32</color>
+
+    <color name="text_primary">#E4E2E6</color>
+    <color name="text_secondary">#A0A0AA</color>
+    <color name="text_hint">#5A5A66</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <color name="editor_text">#E4E2E6</color>
+    <color name="editor_bg">#16161C</color>
+    <color name="editor_title">#F4F2F6</color>
+
+    <color name="divider">#2A2A32</color>
+    <color name="colorPrimary">#B5C2FF</color>
+    <color name="colorPrimaryDark">#8E9DDB</color>
+    <color name="colorAccent">#FFB870</color>
+    <color name="success">#6FC479</color>
+    <color name="danger">#FFB4AB</color>
+
+    <!-- 暗色书封渐变 -->
+    <color name="gradient_start_1">#2942C8</color>
+    <color name="gradient_end_1">#5C6FDE</color>
+    <color name="gradient_start_2">#9A3352</color>
+    <color name="gradient_end_2">#C44569</color>
+    <color name="gradient_start_3">#B07430</color>
+    <color name="gradient_end_3">#E8A043</color>
+    <color name="gradient_start_4">#2D7A3A</color>
+    <color name="gradient_end_4">#3FA34D</color>
 </resources>

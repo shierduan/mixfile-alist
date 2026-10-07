@@ -1,57 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 主色调：深靛蓝，沉稳优雅 -->
-    <color name="primary">#5B5BD6</color>
-    <color name="primary_dark">#4343A8</color>
-    <color name="primary_light">#8B8BE8</color>
-    <color name="primary_container">#E3E3F8</color>
-    <color name="on_primary_container">#1A1A4D</color>
-    <color name="accent">#F0A04B</color>
+    <!-- ====== Material 3 完整色板 ====== -->
+    <!-- Primary：靛蓝 -->
+    <color name="md_primary">#4355DB</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_primary_container">#DEE0FF</color>
+    <color name="md_on_primary_container">#001258</color>
+
+    <!-- Secondary：暖橙 -->
+    <color name="md_secondary">#865409</color>
+    <color name="md_on_secondary">#FFFFFF</color>
+    <color name="md_secondary_container">#FFDDB1</color>
+    <color name="md_on_secondary_container">#2A1700</color>
+
+    <!-- Tertiary：青绿 -->
+    <color name="md_tertiary">#526641</color>
+    <color name="md_on_tertiary">#FFFFFF</color>
+    <color name="md_tertiary_container">#D4EABB</color>
+    <color name="md_on_tertiary_container">#101F00</color>
+
+    <!-- Error -->
+    <color name="md_error">#BA1A1A</color>
+    <color name="md_on_error">#FFFFFF</color>
+    <color name="md_error_container">#FFDAD6</color>
+    <color name="md_on_error_container">#410002</color>
+
+    <!-- Background & Surface -->
+    <color name="md_background">#FBF8F5</color>
+    <color name="md_on_background">#1B1B1B</color>
+    <color name="md_surface">#FBF8F5</color>
+    <color name="md_on_surface">#1B1B1B</color>
+    <color name="md_surface_variant">#E1E2EC</color>
+    <color name="md_on_surface_variant">#44464F</color>
+    <color name="md_surface_container">#F1EDE8</color>
+    <color name="md_surface_container_high">#FBF8F5</color>
+    <color name="md_surface_container_low">#F5F2EE</color>
+    <color name="md_inverse_surface">#2F3036</color>
+    <color name="md_inverse_on_surface">#F1F0F7</color>
+
+    <!-- Outline -->
+    <color name="md_outline">#74767F</color>
+    <color name="md_outline_variant">#C4C6D0</color>
+
+    <!-- ====== 应用语义色 ====== -->
+    <color name="primary">#4355DB</color>
+    <color name="primary_dark">#2D3FB8</color>
+    <color name="primary_light">#7B89EA</color>
+    <color name="accent">#E8A043</color>
     <color name="accent_container">#FFE9D0</color>
 
-    <!-- 背景色 -->
-    <color name="bg_writer">#F6F5F2</color>
+    <color name="bg_writer">#FBF8F5</color>
     <color name="bg_card">#FFFFFF</color>
-    <color name="bg_card_alt">#FBFAF7</color>
+    <color name="bg_card_alt">#F5F2EE</color>
+    <color name="bg_card_elevated">#FFFFFF</color>
 
-    <!-- 文字色 -->
-    <color name="text_primary">#1A1A2E</color>
-    <color name="text_secondary">#6B6B80</color>
-    <color name="text_hint">#B0B0BE</color>
+    <color name="text_primary">#1B1B1B</color>
+    <color name="text_secondary">#5F5F6B</color>
+    <color name="text_hint">#9A9AA5</color>
     <color name="text_on_primary">#FFFFFF</color>
 
-    <!-- 编辑器色 -->
-    <color name="editor_text">#1F1F2E</color>
-    <color name="editor_bg">#FFFEFA</color>
-    <color name="editor_title">#2A2A40</color>
+    <color name="editor_text">#1B1B1B</color>
+    <color name="editor_bg">#FFFEFB</color>
+    <color name="editor_title">#111111</color>
 
-    <!-- 杂项 -->
-    <color name="divider">#ECEAE5</color>
-    <color name="colorPrimary">#5B5BD6</color>
-    <color name="colorPrimaryDark">#4343A8</color>
-    <color name="colorAccent">#F0A04B</color>
+    <color name="divider">#EAE8E3</color>
+    <color name="colorPrimary">#4355DB</color>
+    <color name="colorPrimaryDark">#2D3FB8</color>
+    <color name="colorAccent">#E8A043</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="success">#3FA34D</color>
-    <color name="danger">#E05A6B</color>
+    <color name="danger">#BA1A1A</color>
 
-    <!-- 阅读模式背景 -->
+    <!-- 阅读模式 -->
     <color name="reader_bg_parchment">#F5ECD8</color>
     <color name="reader_bg_white">#FFFFFF</color>
     <color name="reader_bg_green">#C7EDCC</color>
     <color name="reader_bg_dark">#1A1A1A</color>
-
-    <!-- 阅读模式文字色 -->
     <color name="reader_text_light">#2C2C2C</color>
     <color name="reader_text_dark">#D0D0D0</color>
     <color name="reader_title">#333333</color>
     <color name="reader_title_dark">#E0E0E0</color>
 
-    <!-- 书封渐变色（书架用） -->
-    <color name="cover_1">#5B5BD6</color>
-    <color name="cover_2">#E05A6B</color>
-    <color name="cover_3">#F0A04B</color>
+    <!-- 书封渐变色 -->
+    <color name="cover_1">#4355DB</color>
+    <color name="cover_2">#C44569</color>
+    <color name="cover_3">#E8A043</color>
     <color name="cover_4">#3FA34D</color>
     <color name="cover_5">#3B82C4</color>
-    <color name="cover_6">#A855F7</color>
+    <color name="cover_6">#8B5CF6</color>
+    <color name="cover_7">#EC4899</color>
+    <color name="cover_8">#14B8A6</color>
+
+    <!-- 渐变色（书封背景） -->
+    <color name="gradient_start_1">#4355DB</color>
+    <color name="gradient_end_1">#7B89EA</color>
+    <color name="gradient_start_2">#C44569</color>
+    <color name="gradient_end_2">#E8638A</color>
+    <color name="gradient_start_3">#E8A043</color>
+    <color name="gradient_end_3">#F0C075</color>
+    <color name="gradient_start_4">#3FA34D</color>
+    <color name="gradient_end_4">#6FC479</color>
 </resources>

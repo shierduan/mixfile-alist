@@ -322,17 +322,15 @@ class BookAdapter(
         } else {
             holder.binding.tvAuthor.visibility = View.GONE
         }
-        // 封面色：优先用书籍 coverColor，否则按 id 取预设色
-        val coverColors = intArrayOf(
-            context.getColor(R.color.cover_1),
-            context.getColor(R.color.cover_2),
-            context.getColor(R.color.cover_3),
-            context.getColor(R.color.cover_4),
-            context.getColor(R.color.cover_5),
-            context.getColor(R.color.cover_6)
+        // 封面渐变：按 id 分配 4 种渐变背景
+        val coverDrawables = intArrayOf(
+            R.drawable.cover_gradient_1,
+            R.drawable.cover_gradient_2,
+            R.drawable.cover_gradient_3,
+            R.drawable.cover_gradient_4
         )
-        val colorIndex = ((book.id % coverColors.size).toInt()).coerceIn(0, coverColors.size - 1)
-        holder.binding.layoutCover.setBackgroundColor(coverColors[colorIndex])
+        val drawableIndex = ((book.id % coverDrawables.size).toInt()).coerceIn(0, coverDrawables.size - 1)
+        holder.binding.layoutCover.setBackgroundResource(coverDrawables[drawableIndex])
         holder.binding.tvUpdated.text = TimeUtils.getFriendlyTime(book.updatedAt)
 
         // 异步加载统计

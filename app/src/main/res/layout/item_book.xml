@@ -4,47 +4,70 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="6dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="14dp"
-        app:cardElevation="3dp"
-        app:strokeWidth="0dp">
+        app:cardCornerRadius="18dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="0dp"
+        android:foreground="?attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 书封区域 -->
+            <!-- 书封渐变区域 -->
             <FrameLayout
                 android:id="@+id/layoutCover"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/cover_1">
+                android:layout_height="170dp">
 
-                <!-- 书脊装饰线 -->
+                <!-- 书脊装饰 -->
                 <View
-                    android:layout_width="3dp"
+                    android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
-                    android:alpha="0.3"
+                    android:alpha="0.15"
                     android:background="@color/white" />
 
-                <!-- 书名 -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="6dp"
+                    android:alpha="0.2"
+                    android:background="@color/white" />
+
+                <!-- 装饰花纹（右上角） -->
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|top"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:alpha="0.25"
+                    android:gravity="center"
+                    android:text="❝"
+                    android:textColor="@color/white"
+                    android:textSize="32sp" />
+
+                <!-- 书名（衬线体） -->
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="20dp"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="3"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <!-- 作者 -->
@@ -53,10 +76,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="12dp"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:alpha="0.85"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:visibility="gone" />
@@ -67,9 +93,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_card"
+                android:background="@color/md_surface_container_high"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="10dp">
 
                 <TextView
                     android:id="@+id/tvStats"
@@ -83,7 +110,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -97,11 +124,11 @@
 
                     <ImageView
                         android:id="@+id/btnMore"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/settings"
-                        android:padding="4dp"
+                        android:padding="6dp"
                         android:src="@drawable/ic_edit"
                         app:tint="@color/text_hint" />
 
