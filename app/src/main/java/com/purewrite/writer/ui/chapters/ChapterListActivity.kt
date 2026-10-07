@@ -57,8 +57,8 @@ class ChapterListActivity : AppCompatActivity() {
         binding.toolbar.inflateMenu(R.menu.menu_chapters)
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_export -> exportBook()
-                R.id.action_stats -> { /* stats for book */ }
+                R.id.action_export_txt -> exportBook(asMarkdown = false)
+                R.id.action_export_md -> exportBook(asMarkdown = true)
             }
             true
         }
@@ -146,7 +146,8 @@ class ChapterListActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_rename -> showRenameDialog(chapter)
-                R.id.action_export -> exportChapter(chapter)
+                R.id.action_export_txt -> exportChapter(chapter, asMarkdown = false)
+                R.id.action_export_md -> exportChapter(chapter, asMarkdown = true)
                 R.id.action_delete -> showDeleteConfirm(chapter)
             }
             true
@@ -184,37 +185,51 @@ class ChapterListActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun exportBook() {
+    private fun exportBook(asMarkdown: Boolean) {
+        val ext = if (asMarkdown) "md" else "txt"
+        val mime = if (asMarkdown) "text/markdown" else "text/plain"
+        currentExportBookIsMd = asMarkdown
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TITLE, "$bookTitle.txt")
+            type = mime
+            putExtra(Intent.EXTRA_TITLE, "$bookTitle.$ext")
         }
         startActivityForResult(intent, REQUEST_EXPORT_BOOK)
     }
 
-    private fun exportChapter(chapter: ChapterEntity) {
+    private fun exportChapter(chapter: ChapterEntity, asMarkdown: Boolean) {
+        val ext = if (asMarkdown) "md" else "txt"
+        val mime = if (asMarkdown) "text/markdown" else "text/plain"
+        currentExportChapter = chapter
+        currentExportChapterIsMd = asMarkdown
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TITLE, "${chapter.title}.txt")
+            type = mime
+            putExtra(Intent.EXTRA_TITLE, "${chapter.title}.$ext")
         }
-        currentExportChapter = chapter
         startActivityForResult(intent, REQUEST_EXPORT_CHAPTER)
     }
 
     private var currentExportChapter: ChapterEntity? = null
+    private var currentExportChapterIsMd = false
+    private var currentExportBookIsMd = false
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK || data?.data == null) return
         val uri = data.data!!
         when (requestCode) {
             REQUEST_EXPORT_BOOK -> {
+                val asMd = currentExportBookIsMd
                 lifecycleScope.launch {
                     val book = repository.getBookById(bookId) ?: return@launch
                     val chapters = repository.getChaptersByBook(bookId).first()
-                    val success = ExportUtils.exportBookToTxt(this@ChapterListActivity, uri, book, chapters)
+                    val success = if (asMd) {
+                        ExportUtils.exportBookToMarkdown(this@ChapterListActivity, uri, book, chapters)
+                    } else {
+                        ExportUtils.exportBookToTxt(this@ChapterListActivity, uri, book, chapters)
+                    }
                     withContext(Dispatchers.Main) {
                         showToast(if (success) R.string.export_success else R.string.export_failed)
                     }
@@ -222,7 +237,12 @@ class ChapterListActivity : AppCompatActivity() {
             }
             REQUEST_EXPORT_CHAPTER -> {
                 currentExportChapter?.let { chapter ->
-                    val success = ExportUtils.exportChapterToTxt(this, uri, chapter)
+                    val asMd = currentExportChapterIsMd
+                    val success = if (asMd) {
+                        ExportUtils.exportChapterToMarkdown(this, uri, chapter)
+                    } else {
+                        ExportUtils.exportChapterToTxt(this, uri, chapter)
+                    }
                     showToast(if (success) R.string.export_success else R.string.export_failed)
                 }
             }

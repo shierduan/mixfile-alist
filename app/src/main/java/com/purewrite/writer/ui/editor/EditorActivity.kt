@@ -1,5 +1,6 @@
 package com.purewrite.writer.ui.editor
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,13 +9,16 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.purewrite.writer.App
 import com.purewrite.writer.R
 import com.purewrite.writer.data.db.ChapterEntity
 import com.purewrite.writer.databinding.ActivityEditorBinding
+import com.purewrite.writer.ui.preview.PreviewActivity
 import com.purewrite.writer.util.ChinesePunctuationConverter
 import com.purewrite.writer.util.PrefsManager
+import com.purewrite.writer.util.VoiceToTextHelper
 import com.purewrite.writer.util.WordCounter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +45,10 @@ class EditorActivity : AppCompatActivity() {
 
     private var lastSavedContent = ""
 
+    // 语音转文字
+    private lateinit var voiceHelper: VoiceToTextHelper
+    private var isListening = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditorBinding.inflate(layoutInflater)
@@ -49,6 +57,7 @@ class EditorActivity : AppCompatActivity() {
         chapterId = intent.getLongExtra("chapter_id", -1)
         bookId = intent.getLongExtra("book_id", -1)
         prefs = PrefsManager(this)
+        voiceHelper = VoiceToTextHelper(this)
 
         setupToolbar()
         setupEditor()
@@ -129,6 +138,95 @@ class EditorActivity : AppCompatActivity() {
         binding.btnConvert.setOnClickListener { convertAllPunctuation() }
         binding.btnStats.setOnClickListener { showStatsToast() }
         binding.btnSave.setOnClickListener { saveChapter() }
+        binding.btnPreview.setOnClickListener { openPreview() }
+        binding.btnVoice.setOnClickListener { toggleVoiceInput() }
+    }
+
+    /**
+     * 打开 Markdown 预览
+     */
+    private fun openPreview() {
+        // 先保存
+        if (isDirty) saveChapter()
+        val intent = Intent(this, PreviewActivity::class.java).apply {
+            putExtra("chapter_id", chapterId)
+            putExtra("book_id", bookId)
+        }
+        startActivity(intent)
+    }
+
+    /**
+     * 切换语音输入状态
+     */
+    private fun toggleVoiceInput() {
+        if (isListening) {
+            voiceHelper.stopListening()
+            isListening = false
+            binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(this, R.color.text_secondary)
+            )
+        } else {
+            startVoiceInput()
+        }
+    }
+
+    private fun startVoiceInput() {
+        if (!voiceHelper.hasRecordPermission()) {
+            voiceHelper.requestPermission(this, REQUEST_RECORD_AUDIO)
+            return
+        }
+        isListening = true
+        binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
+            ContextCompat.getColor(this, R.color.accent)
+        )
+        Toast.makeText(this, R.string.voice_tap_to_speak, Toast.LENGTH_SHORT).show()
+
+        voiceHelper.startListening(
+            onResult = { text ->
+                isListening = false
+                binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.text_secondary)
+                )
+                if (text.isNotBlank()) {
+                    insertVoiceText(text)
+                }
+            },
+            onError = {
+                isListening = false
+                binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.text_secondary)
+                )
+                Toast.makeText(this, R.string.voice_error, Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    /**
+     * 将语音识别的文字插入到编辑器光标处
+     */
+    private fun insertVoiceText(text: String) {
+        val pos = binding.etContent.selectionStart.coerceAtLeast(0)
+        val editable = binding.etContent.text
+        editable?.insert(pos, "$text")
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_RECORD_AUDIO) {
+            if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                startVoiceInput()
+            } else {
+                Toast.makeText(this, R.string.voice_permission_needed, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_RECORD_AUDIO = 3001
     }
 
     private fun loadChapter() {
@@ -238,5 +336,6 @@ class EditorActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         autoSaveHandler.removeCallbacks(autoSaveRunnable)
+        voiceHelper.destroy()
     }
 }

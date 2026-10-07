@@ -68,4 +68,28 @@
     <string name="sort_by_created">按创建时间</string>
     <string name="sort_by_words">按字数</string>
     <string name="sort_by_title">按标题</string>
+
+    <!-- 夜间模式 -->
+    <string name="night_mode">夜间模式</string>
+    <string name="night_mode_system">跟随系统</string>
+    <string name="night_mode_day">始终日间</string>
+    <string name="night_mode_night">始终夜间</string>
+
+    <!-- Markdown -->
+    <string name="export_md">导出为 Markdown</string>
+    <string name="export_txt">导出为 TXT</string>
+    <string name="import_file">导入文件</string>
+    <string name="import_success">导入成功</string>
+    <string name="import_failed">导入失败</string>
+    <string name="preview">预览</string>
+    <string name="preview_markdown">Markdown 预览</string>
+
+    <!-- 语音转文字 -->
+    <string name="voice_input">语音输入</string>
+    <string name="voice_listening">聆听中...</string>
+    <string name="voice_not_available">设备不支持语音输入</string>
+    <string name="voice_permission_needed">需要录音权限才能使用语音输入</string>
+    <string name="voice_tap_to_speak">点击说话，说完后自动识别</string>
+    <string name="voice_error">语音识别出错</string>
+    <string name="stop_listening">停止聆听</string>
 </resources>

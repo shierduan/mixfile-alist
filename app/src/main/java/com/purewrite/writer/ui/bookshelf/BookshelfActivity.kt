@@ -1,6 +1,7 @@
 package com.purewrite.writer.ui.bookshelf
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -55,6 +56,10 @@ class BookshelfActivity : AppCompatActivity() {
         binding.toolbar.inflateMenu(R.menu.menu_bookshelf)
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
+                R.id.action_import -> {
+                    startImportFile()
+                    true
+                }
                 R.id.action_stats -> {
                     startActivity(Intent(this, StatsActivity::class.java))
                     true
@@ -64,6 +69,50 @@ class BookshelfActivity : AppCompatActivity() {
                     true
                 }
                 else -> false
+            }
+        }
+    }
+
+    /**
+     * 选择文件导入
+     */
+    private fun startImportFile() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/plain", "text/markdown", "application/octet-stream"))
+        }
+        startActivityForResult(intent, REQUEST_IMPORT)
+    }
+
+    /**
+     * 处理导入文件
+     */
+    private fun handleImport(uri: Uri) {
+        lifecycleScope.launch {
+            val result = com.purewrite.writer.util.ImportUtils.importFromFile(this@BookshelfActivity, uri)
+            if (result == null) {
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(
+                        this@BookshelfActivity, R.string.import_failed,
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
+                return@launch
+            }
+            // 创建书籍
+            val book = BookEntity(title = result.bookTitle)
+            val bookId = repository.insertBook(book)
+            // 创建章节
+            result.chapters.forEach { ch ->
+                repository.insertChapter(ch.copy(bookId = bookId))
+            }
+            withContext(Dispatchers.Main) {
+                android.widget.Toast.makeText(
+                    this@BookshelfActivity,
+                    getString(R.string.import_success) + "：${result.bookTitle}（${result.chapters.size} 章）",
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -108,7 +157,8 @@ class BookshelfActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_rename -> showEditBookDialog(book)
-                R.id.action_export -> exportBook(book)
+                R.id.action_export_txt -> exportBook(book, false)
+                R.id.action_export_md -> exportBook(book, true)
                 R.id.action_delete -> showDeleteConfirm(book)
             }
             true
@@ -169,13 +219,17 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private var pendingExportBook: BookEntity? = null
+    private var pendingExportIsMarkdown: Boolean = false
 
-    private fun exportBook(book: BookEntity) {
+    private fun exportBook(book: BookEntity, asMarkdown: Boolean) {
         pendingExportBook = book
+        pendingExportIsMarkdown = asMarkdown
+        val ext = if (asMarkdown) "md" else "txt"
+        val mime = if (asMarkdown) "text/markdown" else "text/plain"
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TITLE, "${book.title}.txt")
+            type = mime
+            putExtra(Intent.EXTRA_TITLE, "${book.title}.$ext")
         }
         startActivityForResult(intent, REQUEST_EXPORT)
     }
@@ -183,20 +237,31 @@ class BookshelfActivity : AppCompatActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_EXPORT && resultCode == RESULT_OK && data?.data != null) {
-            val uri = data.data!!
-            val book = pendingExportBook ?: return
-            lifecycleScope.launch {
-                val chapters = repository.getChaptersByBook(book.id).first()
-                val success = com.purewrite.writer.util.ExportUtils.exportBookToTxt(
-                    this@BookshelfActivity, uri, book, chapters
-                )
-                withContext(Dispatchers.Main) {
-                    android.widget.Toast.makeText(
-                        this@BookshelfActivity,
-                        if (success) R.string.export_success else R.string.export_failed,
-                        android.widget.Toast.LENGTH_SHORT
-                    ).show()
+        if (resultCode != RESULT_OK || data?.data == null) return
+        val uri = data.data!!
+        when (requestCode) {
+            REQUEST_IMPORT -> handleImport(uri)
+            REQUEST_EXPORT -> {
+                val book = pendingExportBook ?: return
+                val asMd = pendingExportIsMarkdown
+                lifecycleScope.launch {
+                    val chapters = repository.getChaptersByBook(book.id).first()
+                    val success = if (asMd) {
+                        com.purewrite.writer.util.ExportUtils.exportBookToMarkdown(
+                            this@BookshelfActivity, uri, book, chapters
+                        )
+                    } else {
+                        com.purewrite.writer.util.ExportUtils.exportBookToTxt(
+                            this@BookshelfActivity, uri, book, chapters
+                        )
+                    }
+                    withContext(Dispatchers.Main) {
+                        android.widget.Toast.makeText(
+                            this@BookshelfActivity,
+                            if (success) R.string.export_success else R.string.export_failed,
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -216,6 +281,7 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val REQUEST_IMPORT = 1000
         private const val REQUEST_EXPORT = 1001
     }
 }

@@ -35,6 +35,13 @@ class PrefsManager(context: Context) {
         get() = prefs.getString("theme_color", "#1A73E8") ?: "#1A73E8"
         set(value) = prefs.edit().putString("theme_color", value).apply()
 
+    /**
+     * 夜间模式：0=跟随系统，1=始终日间，2=始终夜间
+     */
+    var nightMode: Int
+        get() = prefs.getInt("night_mode", 0)
+        set(value) = prefs.edit().putInt("night_mode", value).apply()
+
     var todayWords: Int
         get() {
             val today = TimeUtils.formatDate(System.currentTimeMillis())

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 夜间模式背景色 -->
+    <color name="bg_writer">#121212</color>
+    <color name="bg_card">#1E1E1E</color>
+
+    <!-- 夜间模式文字色 -->
+    <color name="text_primary">#E0E0E0</color>
+    <color name="text_secondary">#AAAAAA</color>
+    <color name="text_hint">#666666</color>
+
+    <!-- 夜间模式编辑器色 -->
+    <color name="editor_text">#E0E0E0</color>
+    <color name="editor_bg">#1A1A1A</color>
+
+    <!-- 夜间模式分隔线 -->
+    <color name="divider">#333333</color>
+</resources>

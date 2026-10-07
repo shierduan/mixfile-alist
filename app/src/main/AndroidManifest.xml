@@ -3,6 +3,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".App"
@@ -37,6 +38,10 @@
 
         <activity
             android:name=".ui.settings.SettingsActivity" />
+
+        <activity
+            android:name=".ui.preview.PreviewActivity"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

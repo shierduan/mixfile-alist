@@ -99,6 +99,26 @@
             app:tint="@color/text_secondary" />
 
         <ImageButton
+            android:id="@+id/btnVoice"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/voice_input"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/text_secondary" />
+
+        <ImageButton
+            android:id="@+id/btnPreview"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/preview"
+            android:src="@drawable/ic_preview"
+            app:tint="@color/text_secondary" />
+
+        <ImageButton
             android:id="@+id/btnConvert"
             android:layout_width="0dp"
             android:layout_height="40dp"

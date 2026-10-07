@@ -1,8 +1,11 @@
 package com.purewrite.writer.ui.settings
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.SeekBar
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import com.purewrite.writer.App
 import com.purewrite.writer.BuildConfig
 import com.purewrite.writer.R
 import com.purewrite.writer.databinding.ActivitySettingsBinding
@@ -66,6 +69,32 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchFullscreen.setOnCheckedChangeListener { _, isChecked ->
             prefs.fullscreenEditor = isChecked
         }
+
+        // 夜间模式
+        val nightModeOptions = arrayOf(
+            getString(R.string.night_mode_system),
+            getString(R.string.night_mode_day),
+            getString(R.string.night_mode_night)
+        )
+        binding.spinnerNightMode.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, nightModeOptions
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        binding.spinnerNightMode.setSelection(prefs.nightMode)
+        binding.spinnerNightMode.onItemSelectedListener =
+            object : android.widget.AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: android.widget.AdapterView<*>?,
+                    view: android.view.View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    prefs.nightMode = position
+                    (application as App).applyNightMode()
+                }
+                override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+            }
 
         // Daily goal
         val goalProgress = prefs.dailyWordGoal / 100

@@ -6,8 +6,12 @@
         android:title="@string/rename" />
 
     <item
-        android:id="@+id/action_export"
-        android:title="@string/export" />
+        android:id="@+id/action_export_txt"
+        android:title="@string/export_txt" />
+
+    <item
+        android:id="@+id/action_export_md"
+        android:title="@string/export_md" />
 
     <item
         android:id="@+id/action_delete"
