@@ -12,8 +12,8 @@ android {
         applicationId = "com.purewrite.writer"
         minSdk = 24
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.2.0"
+        versionCode = 4
+        versionName = "1.3.0"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -73,6 +73,12 @@ dependencies {
 
     // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Vosk 离线语音识别
+    implementation("com.alphacephei:vosk-android:0.3.75")
+
+    // OkHttp 用于下载模型
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")

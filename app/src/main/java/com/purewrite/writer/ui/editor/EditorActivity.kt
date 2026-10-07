@@ -42,10 +42,13 @@ class EditorActivity : AppCompatActivity() {
     private val autoSaveHandler = Handler(Looper.getMainLooper())
     private val autoSaveRunnable = Runnable { saveChapter() }
     private var isDirty = false
-    private var lastSavedContent = ""
+
+    private var voiceProgressDialog: com.google.android.material.dialog.MaterialAlertDialogBuilder? = null
+    private var voiceDialog: androidx.appcompat.app.AlertDialog? = null
 
     private lateinit var voiceHelper: VoiceToTextHelper
     private var isListening = false
+    private var lastSavedContent = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,6 +162,81 @@ class EditorActivity : AppCompatActivity() {
             voiceHelper.requestPermission(this, REQUEST_RECORD_AUDIO)
             return
         }
+        // 检查模型是否就绪，未就绪则提示下载
+        if (!voiceHelper.isModelReady()) {
+            promptDownloadModel()
+            return
+        }
+        beginListening()
+    }
+
+    /** 显示下载模型对话框 */
+    private fun promptDownloadModel() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.voice_model_needed_title))
+            .setMessage(getString(R.string.voice_model_needed_message))
+            .setPositiveButton(getString(R.string.download)) { _, _ ->
+                downloadModel()
+            }
+            .setNegativeButton(getString(android.R.string.cancel), null)
+            .show()
+    }
+
+    /** 下载 Vosk 中文模型（带进度） */
+    private fun downloadModel() {
+        // 自定义进度对话框
+        val progressView = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(60, 40, 60, 20)
+        }
+        val progressBar = android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
+            max = 100
+            progress = 0
+            isIndeterminate = false
+        }
+        val statusText = android.widget.TextView(this).apply {
+            text = "准备下载…"
+            setTextColor(ContextCompat.getColor(this@EditorActivity, R.color.text_secondary))
+            textSize = 13f
+            setPadding(0, 12, 0, 0)
+        }
+        progressView.addView(progressBar)
+        progressView.addView(statusText)
+
+        voiceDialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.voice_downloading_model))
+            .setView(progressView)
+            .setCancelable(false)
+            .setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
+                lifecycleScope.launch {
+                    // 用户取消后不做删除，下次可继续
+                    Toast.makeText(this@EditorActivity, R.string.voice_download_canceled, Toast.LENGTH_SHORT).show()
+                }
+            }
+            .show()
+
+        lifecycleScope.launch {
+            val ok = com.purewrite.writer.util.VoskModelManager.downloadAndExtract(this@EditorActivity) { percent ->
+                runOnUiThread {
+                    progressBar.progress = percent
+                    statusText.text = when {
+                        percent < 100 -> "下载中 $percent%"
+                        else -> "正在解压…"
+                    }
+                }
+            }
+            voiceDialog?.dismiss()
+            if (ok) {
+                Toast.makeText(this@EditorActivity, R.string.voice_model_ready, Toast.LENGTH_SHORT).show()
+                beginListening()
+            } else {
+                Toast.makeText(this@EditorActivity, R.string.voice_download_failed, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    /** 真正开始监听 */
+    private fun beginListening() {
         isListening = true
         binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
             ContextCompat.getColor(this, R.color.accent)
@@ -173,12 +251,22 @@ class EditorActivity : AppCompatActivity() {
                 )
                 if (text.isNotBlank()) insertVoiceText(text)
             },
-            onError = {
+            onError = { msg ->
                 isListening = false
                 binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
                     ContextCompat.getColor(this, R.color.text_secondary)
                 )
-                Toast.makeText(this, R.string.voice_error, Toast.LENGTH_SHORT).show()
+                if (msg == "MODEL_NOT_READY") {
+                    promptDownloadModel()
+                } else {
+                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                }
+            },
+            onTimeout = {
+                isListening = false
+                binding.btnVoice.imageTintList = android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.text_secondary)
+                )
             }
         )
     }

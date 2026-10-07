@@ -3,38 +3,26 @@ package com.purewrite.writer.util
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Bundle
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.purewrite.writer.R
 
 /**
- * 语音转文字助手，使用 Android 原生 SpeechRecognizer
+ * 语音转文字助手（Vosk 离线版）
+ *
+ * 负责权限校验，并把 VoskSpeechRecognizer 封装给 UI 使用。
+ * 模型未就绪时，会通过回调让 UI 走下载流程。
  */
 class VoiceToTextHelper(private val context: Context) {
 
-    private var speechRecognizer: SpeechRecognizer? = null
-    private var onResult: ((String) -> Unit)? = null
-    private var onError: (() -> Unit)? = null
+    private val voskRecognizer = VoskSpeechRecognizer(context)
 
-    /**
-     * 检查是否有录音权限
-     */
     fun hasRecordPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             context, Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    /**
-     * 请求录音权限
-     */
     fun requestPermission(activity: Activity, requestCode: Int) {
         ActivityCompat.requestPermissions(
             activity,
@@ -43,85 +31,70 @@ class VoiceToTextHelper(private val context: Context) {
         )
     }
 
-    /**
-     * 检查设备是否支持语音识别
-     */
-    fun isAvailable(): Boolean {
-        return SpeechRecognizer.isRecognitionAvailable(context)
-    }
+    /** 模型是否已就绪 */
+    fun isModelReady(): Boolean = voskRecognizer.isModelReady()
 
     /**
      * 开始语音识别
-     * @param onResult 识别结果回调（在主线程）
+     * @param onResult 完整识别结果回调
+     * @param onPartial 实时中间结果回调
      * @param onError 错误回调
+     * @param onTimeout 识别超时或结束回调
      */
-    fun startListening(onResult: (String) -> Unit, onError: () -> Unit) {
-        if (!isAvailable()) {
-            Toast.makeText(context, R.string.voice_not_available, Toast.LENGTH_SHORT).show()
-            return
-        }
+    fun startListening(
+        onResult: (String) -> Unit,
+        onPartial: (String) -> Unit = {},
+        onError: (String) -> Unit,
+        onTimeout: () -> Unit = {}
+    ) {
         if (!hasRecordPermission()) {
-            Toast.makeText(context, R.string.voice_permission_needed, Toast.LENGTH_LONG).show()
+            onError("缺少录音权限")
+            return
+        }
+        if (!isModelReady()) {
+            onError("MODEL_NOT_READY")
             return
         }
 
-        this.onResult = onResult
-        this.onError = onError
-
-        speechRecognizer?.destroy()
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context).apply {
-            setRecognitionListener(object : RecognitionListener {
-                override fun onReadyForSpeech(params: Bundle?) {}
-                override fun onBeginningOfSpeech() {}
-                override fun onRmsChanged(rmsdB: Float) {}
-                override fun onBufferReceived(buffer: ByteArray?) {}
-                override fun onEndOfSpeech() {}
-
-                override fun onError(error: Int) {
-                    val callback = this@VoiceToTextHelper.onError
-                    this@VoiceToTextHelper.onError = null
-                    callback?.invoke()
+        // 在后台线程初始化模型并启动监听
+        Thread {
+            try {
+                voskRecognizer.initModel()
+            } catch (e: Exception) {
+                android.os.Handler(android.os.Looper.getMainLooper()).post {
+                    onError("模型加载失败：${e.message}")
                 }
-
-                override fun onResults(results: Bundle?) {
-                    val matches = results
-                        ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    val text = matches?.firstOrNull() ?: ""
-                    val callback = this@VoiceToTextHelper.onResult
-                    this@VoiceToTextHelper.onResult = null
-                    callback?.invoke(text)
+                return@Thread
+            }
+            // 在主线程回调 UI
+            val mainHandler = android.os.Handler(android.os.Looper.getMainLooper())
+            val started = voskRecognizer.startListening(object : VoskSpeechRecognizer.Callback {
+                override fun onResult(text: String) {
+                    mainHandler.post { onResult(text) }
                 }
-
-                override fun onPartialResults(partialResults: Bundle?) {}
-                override fun onEvent(eventType: Int, params: Bundle?) {}
+                override fun onPartial(text: String) {
+                    mainHandler.post { onPartial(text) }
+                }
+                override fun onError(message: String) {
+                    mainHandler.post { onError(message) }
+                }
+                override fun onTimeout() {
+                    mainHandler.post { onTimeout() }
+                }
             })
-        }
-
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            // 使用中文识别，支持简体
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh-CN")
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "zh-CN")
-            putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, true)
-            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
-            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-        }
-
-        speechRecognizer?.startListening(intent)
+            if (!started) {
+                mainHandler.post { onError("语音识别启动失败") }
+            }
+        }.also { it.isDaemon = true }.start()
     }
 
-    /**
-     * 停止语音识别
-     */
+    /** 停止语音识别 */
     fun stopListening() {
-        speechRecognizer?.stopListening()
+        voskRecognizer.stopListening()
     }
 
-    /**
-     * 释放资源
-     */
+    /** 释放资源 */
     fun destroy() {
-        speechRecognizer?.destroy()
-        speechRecognizer = null
+        voskRecognizer.destroy()
     }
 }
